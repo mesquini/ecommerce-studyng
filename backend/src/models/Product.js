@@ -9,7 +9,8 @@ class Product extends Model {
         quantity: DataTypes.STRING
       },
       {
-        sequelize
+        sequelize,
+        tableName: 'products'
       }
     );
   }

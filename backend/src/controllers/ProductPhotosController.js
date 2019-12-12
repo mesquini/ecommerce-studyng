@@ -13,14 +13,16 @@ module.exports = {
     return res.json(product);
   },
   async store(req, res) {
+    const { originalname:name, size, key, location: url = "" } = req.file;
     const { id_product } = req.params;
-    const { name, key, url } = req.body;
-
+    console.log("url -> "+url);
+    
     const product = await Product.findByPk(id_product);
     if (!product) return res.status(400).json({ error: "Product not found" });
 
     const photos = await ProductPhotos.create({
       name,
+      size,
       key,
       url,
       id_product

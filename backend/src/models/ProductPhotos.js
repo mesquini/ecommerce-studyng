@@ -6,7 +6,8 @@ class ProductPhotos extends Model {
       {
         name: DataTypes.STRING,
         key: DataTypes.STRING,
-        url: DataTypes.STRING
+        url: DataTypes.STRING,
+        size: DataTypes.INTEGER
       },
       {
         sequelize

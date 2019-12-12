@@ -1,0 +1,20 @@
+model.findAll({
+    attributes : [''], //campos que serão exibidor
+    where: {
+        <campo>: {
+            [Op.iLike]: '%'//cria um filtro como LIKE
+        }
+    },
+    include:: [
+        {association: '', where : { <campo>: ''}},//faz um innerjoin na tabela junto com filtro
+        {
+            association: '',
+            required: false,//uma condição nao obrigatoria
+            where: {
+                <campo>: {
+                    [Op.iLike]:  '%%'
+                }
+            }
+        }
+    ]
+})
