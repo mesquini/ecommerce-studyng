@@ -19,7 +19,14 @@ module.exports = {
       },
       email: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: false,
+        validate:{
+          isEmail: true,
+        },
+      },
+      adm: {
+        type: Sequelize.BOOLEAN,
+        allowNull: false,
       },
       created_at: {
         type: Sequelize.DATE,
