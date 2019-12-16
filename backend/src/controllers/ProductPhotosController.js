@@ -17,7 +17,6 @@ module.exports = {
   async store(req, res) {
     const { originalname: name, size, key, location: url = "" } = req.file;
     const { id_product } = req.params;
-    console.log("url -> " + url);
 
     const product = await Product.findByPk(id_product);
     if (!product) return res.status(400).json({ error: "Product not found" });

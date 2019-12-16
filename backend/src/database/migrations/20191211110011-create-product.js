@@ -17,6 +17,10 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false
       },
+      price: {
+        type: Sequelize.DOUBLE,
+        allowNull: false
+      },
       created_at: {
         type: Sequelize.DATE,
         allowNull: false

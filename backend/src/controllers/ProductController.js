@@ -4,14 +4,15 @@ const s3 = new aws.S3();
 
 module.exports = {
   async index(req, res) {
-    const { page, paginate = 5 } = req.query;
+    const { page = 1, paginate = 5 } = req.query;
 
     const options = {
       //attributes: ['id', 'name'],
       page, // Default 1
       paginate, // Default 25
       order: [["name", "ASC"]],
-      where: {}
+      where: {},
+      include: { association: "photos", limit: 1, attributes: ["url"] }
     };
 
     const products = await Product.paginate(options);
@@ -19,18 +20,18 @@ module.exports = {
     return res.json(products);
   },
   async store(req, res) {
-    const { name, quantity } = req.body;
+    const { name, quantity, price } = req.body;
 
-    const product = await Product.create({ name, quantity });
+    const product = await Product.create({ name, quantity, price });
 
     return res.json(product);
   },
   async update(req, res) {
-
-    const { name, quantity } = req.body;
+    const { name, quantity, price } = req.body;
+    const updated_at = new Date();
 
     await Product.update(
-      { name, quantity },
+      { name, quantity, price, updated_at },
       {
         where: { id: req.params.id_product }
       }
