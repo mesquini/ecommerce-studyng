@@ -17,6 +17,7 @@ routers.get("/", (req, res) => {
 routers.get("/products", ProductController.index);
 routers.get("/product/:id_product", ProductPhotosController.index);
 routers.get("/user/:id_user", UserController.index);
+routers.get("/verify-token/:token", LoginController.verify_token);
 
 routers.post("/new-product", verifyJWT, ProductController.store);
 routers.post(

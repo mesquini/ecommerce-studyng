@@ -1,0 +1,31 @@
+.header{
+    margin: 0 auto;
+    background-color: teal;
+    text-align: center;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-gap: 5px;
+    padding: 10px;
+}
+.header .logo{
+    height: 50px;
+}
+
+.header button {
+    border: 0;
+    background-color: transparent;
+    cursor: pointer;
+}
+
+.header input{
+    font-size: 16px;
+    font-family: Arial, Helvetica, sans-serif;
+    height: 80%;
+    width: 160%;
+}
+
+.header .cart {
+    height: 40px;
+    background-color: transparent;
+    border: 0;
+}

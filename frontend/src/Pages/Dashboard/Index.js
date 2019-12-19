@@ -4,6 +4,8 @@ import api from "../../Services/api";
 
 import buyButton from "../../Assets/botão-comprar-agora.png";
 
+import Header from '../Header/Index'
+
 import "./index.css";
 
 export default function Dashboard() {
@@ -25,6 +27,7 @@ export default function Dashboard() {
 
   return (
     <div className="main">
+      <Header />
       <strong>Total de itens {total}</strong>
       <ul>
         {products.map(p => (
