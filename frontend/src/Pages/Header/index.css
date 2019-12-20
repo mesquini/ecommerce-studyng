@@ -3,7 +3,7 @@
     background-color: teal;
     text-align: center;
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     grid-gap: 5px;
     padding: 10px;
 }
@@ -17,15 +17,61 @@
     cursor: pointer;
 }
 
-.header input{
+.header form input{
     font-size: 16px;
     font-family: Arial, Helvetica, sans-serif;
-    height: 80%;
+    margin-top: 3%;
+    height: 50%;
     width: 160%;
 }
 
+.header form .search{
+    position: absolute;
+    margin-top: -1.5%;
+    margin-left: 25%;
+}
+
+.header .user-name{
+    margin-top: 4%;
+    margin-left: 70%;
+}
+.header .avatar{
+    height: 35px;    
+    
+}
+.header .avatarB{
+    height: 35px;   
+    width: 20px;
+    margin-left: 85%;
+    margin-top: 2%;
+}
 .header .cart {
     height: 40px;
     background-color: transparent;
     border: 0;
+}
+
+.header .login-register{
+    position: absolute;
+    width: 10%;
+    height: 10%;
+    background-color: blue;
+    margin-left: 66.5%;
+    margin-top: 3.5%;
+}
+
+.header .login-register button {
+    width: 100%;
+    height: 20%;
+    margin-top: 8%;
+    border: 0px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #ddd;
+    cursor: pointer;
+}
+
+.header .login-register button:hover{
+    background-color: black;
+    animation: all 0.2s;
 }

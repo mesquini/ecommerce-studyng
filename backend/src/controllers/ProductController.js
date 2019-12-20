@@ -1,5 +1,6 @@
 const Product = require("../models/Product");
 const aws = require("aws-sdk");
+const { Op } = require("sequelize");
 const s3 = new aws.S3();
 
 module.exports = {
@@ -38,6 +39,23 @@ module.exports = {
     );
 
     return res.send();
+  },
+  async search(req, res) {
+    const { searchInput = "" } = req.params;
+    const { page = 1, paginate = 5 } = req.query;
+
+    const options = {
+      //attributes: ['id', 'name'],
+      page, // Default 1
+      paginate, // Default 25
+      order: [["name", "ASC"]],
+      where: { name: { [Op.iLike]: `%${searchInput}%` } },
+      include: { association: "photos", limit: 1, attributes: ["url"] }
+    };
+
+    const products = await Product.paginate(options);
+
+    return res.json(products);
   },
   async delete(req, res) {
     const product = await Product.findByPk(req.params.id_product, {
