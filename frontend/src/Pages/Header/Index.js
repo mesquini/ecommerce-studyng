@@ -1,24 +1,26 @@
 import React, { useState, useEffect, useRef } from "react";
 import api from "../../Services/api";
-
+import { useHistory } from "react-router-dom";
 import "./index.css";
 import search from "../../Assets/search.png";
 import logo from "../../Assets/logo.png";
 import cart from "../../Assets/cart.png";
 import avatar from "../../Assets/user.png";
 
-export default function Header({ history }) {
+export default function Header({ search_product, page_product }) {
   const [user, setUser] = useState({});
   const [searchInput, setSearch] = useState("");
   const [hoverRef, isHovered] = useHover();
+  const history = useHistory();
 
   useEffect(() => {
-    async function loadUser() {
+    async function loadUser() {   
       var token = localStorage.getItem("@token-user");
       if (!token) return setUser("");
 
       const { data } = await api.get(`/verify-token/${token}`);
       setUser(data);
+      window.location.reload();
     }
     loadUser();
   }, []);
@@ -27,17 +29,14 @@ export default function Header({ history }) {
     e.preventDefault();
     if (searchInput) {
       const { data } = await api.get(
-        `/product-search/${searchInput}?paginate=${5}&page=${1}`
+        `/product-search/${searchInput}?paginate=${2}&page=${page_product}`
       );
 
-      await localStorage.setItem(
-        "@ecommerce/product-search",
-        JSON.stringify(data)
-      );
-      window.location.reload();
+      localStorage.setItem("@ecommerce/product-search", JSON.stringify(data));
+      history.push(`/product-search/${searchInput}/${page_product}`);     
     } else {
-      await localStorage.removeItem("@ecommerce/product-search");
-      window.location.reload();
+      localStorage.removeItem("@ecommerce/product-search");
+      history.push("/");      
     }
   }
 
@@ -67,10 +66,12 @@ export default function Header({ history }) {
       <button style={{ width: 10, marginLeft: 130 }}>
         <img className="cart" src={cart} alt="cart" />
       </button>
-        {isHovered && <div className='login-register'>
+      {isHovered && (
+        <div className="login-register">
           <button>Entrar</button>
           <button>Cadastrar</button>
-        </div>}
+        </div>
+      )}
     </div>
   );
 }
