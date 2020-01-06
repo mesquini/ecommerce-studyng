@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import api from "../../Services/api";
-import { useHistory } from "react-router-dom";
+import { useHistory, Link } from "react-router-dom";
 import "./index.css";
 import search from "../../Assets/search.png";
 import logo from "../../Assets/logo.png";
@@ -14,7 +14,7 @@ export default function Header({ search_product, page_product }) {
   const history = useHistory();
 
   useEffect(() => {
-    async function loadUser() {   
+    async function loadUser() {
       var token = localStorage.getItem("@token-user");
       if (!token) return setUser("");
 
@@ -33,16 +33,18 @@ export default function Header({ search_product, page_product }) {
       );
 
       localStorage.setItem("@ecommerce/product-search", JSON.stringify(data));
-      history.push(`/product-search/${searchInput}/${page_product}`);     
+      history.push(`/product-search/${searchInput}/${page_product}`);
     } else {
       localStorage.removeItem("@ecommerce/product-search");
-      history.push("/");      
+      history.push("/");
     }
   }
 
   return (
     <div className="header">
-      <img className="logo" src={logo} alt="logo" />
+      <Link to='/'>
+        <img className="logo" src={logo} alt="logo" />
+      </Link>
       <form onSubmit={handleSearch}>
         <input
           className="busca"

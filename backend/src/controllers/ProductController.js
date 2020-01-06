@@ -13,7 +13,7 @@ module.exports = {
       paginate, // Default 25
       order: [["name", "ASC"]],
       where: {},
-      include: { association: "photos", limit: 1, attributes: ["url"] }
+      include: { association: "photos", limit: 1, attributes: ["url","id"] }
     };
 
     const products = await Product.paginate(options);

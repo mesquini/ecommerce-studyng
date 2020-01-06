@@ -12,9 +12,9 @@ import "./index.css";
 export default function Dashboard({ search_product, page_product = 1 }) {
   const [products, setProduct] = useState([]);
   const [page, setPages] = useState(0);
+  const [count, setCount] = useState(0);
   const [total, setTotal] = useState(0);
   const searchProduct = localStorage.getItem("@ecommerce/product-search");
-  var backButton = document.getElementById("backButton");
   const history = useHistory();
   const paginate = 2;
 
@@ -27,7 +27,7 @@ export default function Dashboard({ search_product, page_product = 1 }) {
         setTotal(total);
       } else {
         const { data } = await api.get(
-          `products?paginate=${paginate}&page=${1}`
+          `products?paginate=${paginate}&page=${page_product}`
         );
         const { docs, pages, total } = data;
         setProduct(docs);
@@ -39,44 +39,56 @@ export default function Dashboard({ search_product, page_product = 1 }) {
   }, [searchProduct]);
 
   async function loadPage(p) {
-    history.push(`/products/${p}`);
     const { data } = await api.get(`products?paginate=${paginate}&page=${p}`);
     const { docs } = data;
     setProduct(docs);
+    setCount(p);
+    history.push(`/products/${p}`);
   }
 
   async function handleBuy(idProduct) {
     console.log(idProduct);
   }
-  var next = 1;
+  async function handleSeeMore(idProduct) {
+    history.push(`/product/${idProduct}`);
+  }
+
   function handleBack(e) {
     e.preventDefault();
-    let p = page + 1;
-    if (page === p) return;
-    else loadPage(p);
+    if (page < count) return;
+    else {
+      let c = count - 1;
+      loadPage(c);
+    }
   }
   function handleProxy(e) {
     e.preventDefault();
-    next++;
-    if (page > next) return;
-    else loadPage(next);
+    if (count >= page) return;
+    else {
+      let c = count + 1;
+      c = c === 1 ? 2 : c;
+      loadPage(c);
+    }
   }
 
   return (
-    <div>
+    <>
       <Header search_product={search_product} page_product={page_product} />
       <div className="main">
         <strong>Total de itens {total}</strong>
         <ul>
           {products.map(p => (
             <li key={p.id}>
-              {p.photos.map(i =>
-                i.url ? (
-                  <img key={i.url} src={i.url} alt="product" />
-                ) : (
-                  <img src={productNotImage} alt="product" />
-                )
-              )}
+              {p.photos.map(i => (
+                <button
+                  className="see-more"
+                  onClick={() => handleSeeMore(p.id)}
+                  style={{ border: 0, cursor: "pointer" }}
+                  key={i.id}
+                >
+                  <img src={i.url} alt="product" />
+                </button>
+              ))}
               <footer>
                 <strong>{p.name}</strong>
                 <p>Quantidade: {p.quantity}</p>
@@ -93,11 +105,7 @@ export default function Dashboard({ search_product, page_product = 1 }) {
           ))}
         </ul>
         <div className="buttonsPages">
-          <button
-            className="backButton"
-            id="backButton"
-            onClick={e => handleBack(e)}
-          >
+          <button className="backButton" onClick={e => handleBack(e)}>
             Anterior
           </button>
           <button className="nextButton" onClick={e => handleProxy(e)}>
@@ -105,6 +113,6 @@ export default function Dashboard({ search_product, page_product = 1 }) {
           </button>
         </div>
       </div>
-    </div>
+    </>
   );
 }
