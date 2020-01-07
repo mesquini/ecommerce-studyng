@@ -4,7 +4,6 @@ import api from "../../Services/api";
 import { useHistory } from "react-router-dom";
 
 import buyButton from "../../Assets/botão-comprar-agora.png";
-import productNotImage from "../../Assets/productNotImage.png";
 import Header from "../Header/Index";
 
 import "./index.css";
