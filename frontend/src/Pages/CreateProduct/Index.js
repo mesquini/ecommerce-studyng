@@ -2,12 +2,15 @@ import React, { useState, useEffect } from "react";
 import Dropzone from "react-dropzone";
 import { uniqueId } from "lodash";
 import filesize from "filesize";
+import { Button, Modal, Form, Col } from "react-bootstrap";
 
 import api from "../../Services/api";
 import { useHistory } from "react-router-dom";
-import "./index.css";
 import FileList from "../../components/FileList/index.js";
+import Header from "../Header/Index";
 
+import "./index.css";
+import "bootstrap/dist/css/bootstrap.min.css";
 import { DropContainer, UploadMessage } from "./style";
 
 export default function CreateProduct() {
@@ -15,20 +18,49 @@ export default function CreateProduct() {
   const [price, setPrice] = useState("");
   const [quantity, setQuantity] = useState("");
   const [photo, setPhoto] = useState([]);
-  const [product, setProduct] = useState({});
+  const [validated, setValidated] = useState(false);
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
   const history = useHistory();
 
   async function handleSubmit(e) {
-    e.preventDefault();
+    let form = e.currentTarget;
+    if (form.checkValidity() === false) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    setValidated(true);
     let { data } = await api.post("/new-product", {
       name,
       price,
       quantity
     });
 
-    photo.forEach( p => processUpload(p, data.id));
+    photo.forEach(p => processUpload(p, data.id));
+
+    setShow(true);
   }
-  
+
+  function Message() {
+    return (
+      <Modal show={show} onHide={handleClose}>
+        <Modal.Header>
+          <Modal.Title>Produto cadastrado com sucessso!</Modal.Title>{" "}
+        </Modal.Header>
+        <Modal.Body>Deseja cadastrar outro?</Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => handleClose}>
+            Sim
+          </Button>
+          <Button ariant="primary" onClick={() => history.push("/")}>
+            Não
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    );
+  }
+
   function handleUpload(files) {
     const uploadedFiles = files.map(file => ({
       file,
@@ -50,7 +82,7 @@ export default function CreateProduct() {
   function processUpload(file, id) {
     const data = new FormData();
     data.append("file", file.file, file.name);
-    
+
     api
       .post(`/new-product/${id}/photos`, data, {
         onUploadProgress: e => {
@@ -92,35 +124,43 @@ export default function CreateProduct() {
 
   return (
     <>
-      <div>
-        <strong>Cadastre um produto</strong>
-        <form onSubmit={handleSubmit}>
-          <p>
-            Nome:
-            <input
-              type="text"
-              value={name}
-              onChange={e => setName(e.target.value)}
-            />
-          </p>
-          <p>
-            Preço:
-            <input
-              type="text"
-              value={price}
-              onChange={e => setPrice(e.target.value)}
-            />
-          </p>
-          <p>
-            Quantidade:
-            <input
-              type="text"
-              value={quantity}
-              onChange={e => setQuantity(e.target.value)}
-            />
-          </p>
+      <Header />
+      <Message />
+      <div style={{ flex: 1 }}>
+        <h1>
+          <strong>Cadastre um produto</strong>
+        </h1>
+        <Form noValidate validated={validated} onSubmit={handleSubmit}>
+          <Form.Row>
+            <Form.Group as={Col} md="4" controlId="validationCustom01">
+              <Form.Label>Nome:</Form.Label>
+              <Form.Control
+                required
+                type="text"
+                placeholder="Nome do produto"
+                value={name}
+                onChange={e => setName(e.target.value)}
+              />
+              <Form.Label>Quantidade:</Form.Label>
+              <Form.Control
+                required
+                type="number"
+                placeholder="Quantidade"
+                value={quantity}
+                onChange={e => setQuantity(e.target.value)}
+              />
+              <Form.Label>Preço:</Form.Label>
+              <Form.Control
+                required
+                type="number"
+                placeholder="Preço do produto"
+                value={price}
+                onChange={e => setPrice(e.target.value)}
+              />
+            </Form.Group>
+          </Form.Row>
           <div className="upload-img">
-            <Dropzone accept="image/*" onDropAccepted={handleUpload}>
+            <Dropzone required accept="image/*" onDropAccepted={handleUpload}>
               {({
                 getRootProps,
                 getInputProps,
@@ -139,8 +179,8 @@ export default function CreateProduct() {
             </Dropzone>
             {!!photo.length && <FileList files={photo} />}
           </div>
-          <button type="submit">Cadastrar</button>
-        </form>
+          <Button type="submit">Cadastrar</Button>
+        </Form>
       </div>
     </>
   );

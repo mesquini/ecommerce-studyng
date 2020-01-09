@@ -1,8 +1,18 @@
 import React, { useState, useEffect, useRef } from "react";
 import api from "../../Services/api";
 import { useHistory, Link } from "react-router-dom";
-import "./index.css";
-import search from "../../Assets/search.png";
+import {
+  Form,
+  FormControl,
+  Button,
+  Navbar,
+  Nav,
+  NavDropdown
+} from "react-bootstrap";
+
+import "bootstrap/dist/css/bootstrap.min.css";
+//import "./index.css";
+
 import logo from "../../Assets/logo.png";
 import cart from "../../Assets/cart.png";
 import avatar from "../../Assets/user.png";
@@ -10,7 +20,6 @@ import avatar from "../../Assets/user.png";
 export default function Header({ search_product, page_product }) {
   const [user, setUser] = useState({});
   const [searchInput, setSearch] = useState("");
-  const [hoverRef, isHovered] = useHover();
   const history = useHistory();
 
   useEffect(() => {
@@ -41,69 +50,64 @@ export default function Header({ search_product, page_product }) {
   }
 
   return (
-    <div className="header">
-      <Link to='/'>
-        <img className="logo" src={logo} alt="logo" />
-      </Link>
-      <form onSubmit={handleSearch}>
-        <input
-          className="busca"
-          type="text"
-          autoComplete="off"
-          value={searchInput.toLowerCase()}
-          onChange={e => setSearch(e.target.value)}
-          placeholder="tem tuudo, pode procurar!"
-        />
-        <button className="search" type="submit">
-          <img style={{ height: 20 }} src={search} alt="pesquisar" />
-        </button>
-      </form>
-      {user.length > 0 ? (
-        <strong className="user-name">Bem vindo {user.name}</strong>
-      ) : (
-        <button className="avatarB" ref={hoverRef}>
-          <img className="avatar" src={avatar} alt="avatar" />
-        </button>
-      )}
-      <button style={{ width: 10, marginLeft: 130 }}>
-        <img className="cart" src={cart} alt="cart" />
-      </button>
-      {isHovered && (
-        <div className="login-register">
-          <button>Entrar</button>
-          <button>Cadastrar</button>
-        </div>
-      )}
-    </div>
+    <>
+      <Navbar collapseOnSelect bg="dark" variant="dark">
+        <Link to="/">
+          <Navbar.Brand>
+            <img
+              width="300"
+              height="30"
+              className="d-inline-block align-top"
+              src={logo}
+              alt="logo"
+            />
+          </Navbar.Brand>
+        </Link>
+        <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+        <Navbar.Collapse id="basic-navbar-nav">
+          <Nav className="mr-auto">
+            <Nav.Link href="#home">Home</Nav.Link>
+            <Nav.Link href="#features">Features</Nav.Link>
+            <Nav.Link href="#pricing">Pricing</Nav.Link>
+            <Form inline>
+              <FormControl
+                className="mr-sm-2"
+                type="text"
+                autoComplete="off"
+                value={searchInput.toLowerCase()}
+                onChange={e => setSearch(e.target.value)}
+                placeholder="tem tuudo, pode procurar!"
+                style={{width: 450}}
+              />
+              <Button onClick={handleSearch} variant="outline-info">
+                Pesquisar
+              </Button>
+            </Form>
+            <Link to="/create-product">
+              <Button variant="outline-info">Cadastrar item</Button>
+            </Link>
+            {!user.length > 0 ? (
+              <NavDropdown
+                title={
+                  <img style={{ width: 25 }} src={avatar} alt="avatar" />
+                }
+                id="collasible-nav-dropdown"
+              >
+                <NavDropdown.Item href="#">Acessar</NavDropdown.Item>
+                <NavDropdown.Item href="#">Cadastrar</NavDropdown.Item>
+              </NavDropdown>
+            ) : (
+              <strong className="user-name">Bem vindo {user.name}</strong>
+            )}
+            <NavDropdown
+              title={<img style={{ width: 25 }} src={cart} alt="cart" />}
+              id="collasible-nav-dropdown"
+            >
+              <NavDropdown.Item href="#">Lista de Itens...</NavDropdown.Item>
+            </NavDropdown>
+          </Nav>
+        </Navbar.Collapse>
+      </Navbar>
+    </>
   );
-}
-
-// Hook
-function useHover() {
-  const [value, setValue] = useState(false);
-
-  const ref = useRef(null);
-
-  const handleMouseOver = () => setValue(true);
-  const handleMouseOut = () => setValue(false);
-
-  useEffect(
-    () => {
-      const node = ref.current;
-      if (node) {
-        node.addEventListener("mouseover", handleMouseOver);
-        //node.addEventListener("mouseout", handleMouseOut);
-        node.addEventListener("click", handleMouseOut);
-
-        return () => {
-          node.removeEventListener("mouseover", handleMouseOver);
-          //node.removeEventListener("mouseout", handleMouseOut);
-          node.removeEventListener("click", handleMouseOut);
-        };
-      }
-    },
-    [ref.current] // Recall only if ref changes
-  );
-
-  return [ref, value];
 }

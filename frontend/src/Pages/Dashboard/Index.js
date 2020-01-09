@@ -5,7 +5,9 @@ import { useHistory } from "react-router-dom";
 
 import buyButton from "../../Assets/botão-comprar-agora.png";
 import Header from "../Header/Index";
+import { Pagination } from "react-bootstrap";
 
+import "bootstrap/dist/css/bootstrap.min.css";
 import "./index.css";
 
 export default function Dashboard({ search_product, page_product = 1 }) {
@@ -35,7 +37,7 @@ export default function Dashboard({ search_product, page_product = 1 }) {
       }
     }
     load();
-  }, [searchProduct]);
+  }, [searchProduct, search_product]);
 
   async function loadPage(p) {
     const { data } = await api.get(`products?paginate=${paginate}&page=${p}`);
@@ -69,7 +71,23 @@ export default function Dashboard({ search_product, page_product = 1 }) {
       loadPage(c);
     }
   }
+  let active = 2;
+  let items = [];
+  for (let number = 1; number <= page_product; number++) {
+    items.push(
+      <Pagination.Item key={number} active={number === active}>
+        {number}
+      </Pagination.Item>
+    );
+  }
 
+  function PaginationBasic() {
+    return (
+      <div>
+        <Pagination>{items}</Pagination>
+      </div>
+    );
+  }
   return (
     <>
       <Header search_product={search_product} page_product={page_product} />
@@ -103,6 +121,7 @@ export default function Dashboard({ search_product, page_product = 1 }) {
             </li>
           ))}
         </ul>
+        <PaginationBasic />
         <div className="buttonsPages">
           <button className="backButton" onClick={e => handleBack(e)}>
             Anterior
