@@ -126,61 +126,63 @@ export default function CreateProduct() {
     <>
       <Header />
       <Message />
-      <div style={{ flex: 1 }}>
+      <div style={{}}>
         <h1>
           <strong>Cadastre um produto</strong>
         </h1>
-        <Form noValidate validated={validated} onSubmit={handleSubmit}>
-          <Form.Row>
-            <Form.Group as={Col} md="4" controlId="validationCustom01">
-              <Form.Label>Nome:</Form.Label>
-              <Form.Control
-                required
-                type="text"
-                placeholder="Nome do produto"
-                value={name}
-                onChange={e => setName(e.target.value)}
-              />
-              <Form.Label>Quantidade:</Form.Label>
-              <Form.Control
-                required
-                type="number"
-                placeholder="Quantidade"
-                value={quantity}
-                onChange={e => setQuantity(e.target.value)}
-              />
-              <Form.Label>Preço:</Form.Label>
-              <Form.Control
-                required
-                type="number"
-                placeholder="Preço do produto"
-                value={price}
-                onChange={e => setPrice(e.target.value)}
-              />
-            </Form.Group>
-          </Form.Row>
-          <div className="upload-img">
-            <Dropzone required accept="image/*" onDropAccepted={handleUpload}>
-              {({
-                getRootProps,
-                getInputProps,
-                isDragActive,
-                isDragReject
-              }) => (
-                <DropContainer
-                  {...getRootProps()}
-                  isDragActive={isDragActive}
-                  isDragReject={isDragReject}
-                >
-                  <input {...getInputProps()} />
-                  {dragMessage(isDragActive, isDragReject)}
-                </DropContainer>
-              )}
-            </Dropzone>
-            {!!photo.length && <FileList files={photo} />}
-          </div>
-          <Button type="submit">Cadastrar</Button>
-        </Form>
+        <div>
+          <Form noValidate validated={validated} onSubmit={handleSubmit}>
+            <Form.Row>
+              <Form.Group as={Col} md="4" controlId="validationCustom01">
+                <Form.Label>Nome:</Form.Label>
+                <Form.Control
+                  required
+                  type="text"
+                  placeholder="Nome do produto"
+                  value={name}
+                  onChange={e => setName(e.target.value)}
+                />
+                <Form.Label>Quantidade:</Form.Label>
+                <Form.Control
+                  required
+                  type="number"
+                  placeholder="Quantidade"
+                  value={quantity}
+                  onChange={e => setQuantity(e.target.value)}
+                />
+                <Form.Label>Preço:</Form.Label>
+                <Form.Control
+                  required
+                  type="number"
+                  placeholder="Preço do produto"
+                  value={price}
+                  onChange={e => setPrice(e.target.value)}
+                />
+              </Form.Group>
+            </Form.Row>
+            <div className="upload-img">
+              <Dropzone required accept="image/*" onDropAccepted={handleUpload}>
+                {({
+                  getRootProps,
+                  getInputProps,
+                  isDragActive,
+                  isDragReject
+                }) => (
+                  <DropContainer
+                    {...getRootProps()}
+                    isDragActive={isDragActive}
+                    isDragReject={isDragReject}
+                  >
+                    <input {...getInputProps()} />
+                    {dragMessage(isDragActive, isDragReject)}
+                  </DropContainer>
+                )}
+              </Dropzone>
+              {!!photo.length && <FileList files={photo} />}
+            </div>
+            <Button type="submit">Cadastrar</Button>
+          </Form>
+        </div>
       </div>
     </>
   );

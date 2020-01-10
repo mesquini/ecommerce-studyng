@@ -7,7 +7,8 @@ import {
   Button,
   Navbar,
   Nav,
-  NavDropdown
+  NavDropdown,
+  Badge
 } from "react-bootstrap";
 
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -77,7 +78,7 @@ export default function Header({ search_product, page_product }) {
                 value={searchInput.toLowerCase()}
                 onChange={e => setSearch(e.target.value)}
                 placeholder="tem tuudo, pode procurar!"
-                style={{width: 450}}
+                style={{ width: 450 }}
               />
               <Button onClick={handleSearch} variant="outline-info">
                 Pesquisar
@@ -88,9 +89,7 @@ export default function Header({ search_product, page_product }) {
             </Link>
             {!user.length > 0 ? (
               <NavDropdown
-                title={
-                  <img style={{ width: 25 }} src={avatar} alt="avatar" />
-                }
+                title={<img style={{ width: 25 }} src={avatar} alt="avatar" />}
                 id="collasible-nav-dropdown"
               >
                 <NavDropdown.Item href="#">Acessar</NavDropdown.Item>
@@ -105,6 +104,17 @@ export default function Header({ search_product, page_product }) {
             >
               <NavDropdown.Item href="#">Lista de Itens...</NavDropdown.Item>
             </NavDropdown>
+            <Badge
+              style={{
+                fontSize: 16,
+                marginTop: 18,
+                marginLeft: -30,
+                backgroundColor: "white",
+                borderRadius: 50
+              }}
+            >
+              8
+            </Badge>
           </Nav>
         </Navbar.Collapse>
       </Navbar>
